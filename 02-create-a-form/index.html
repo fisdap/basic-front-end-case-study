@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+	
+<head lang = "en">
+	<title>Ultimate Task List App</title>
+
+	<meta charset="UTF-8">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<link rel = "stylesheet" href = "style.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+	<script src="https://cdn.jsdelivr.net/angularjs/1.4.7/angular.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/angularjs/1.4.7/angular-route.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/angularjs/1.4.7/angular-animate.min.js"></script>
+
+</head>
+	 
+<body>
+
+	<div ng-app = "app" ng-controller = "ParentCtrl as pc">
+
+		<!-- All the contents of the page is displayed right here! 
+			There are two views total, the templates are below -->
+		<div class="page {{ pageClass }}" ng-view></div>
+	
+		<!-- This is the template for what you see on the font page that lists users 
+			Normally these would be in seperate files but that was causing CORS problems
+			with Chrome. Luckily Angular provides a workaround for this -->
+
+		<!-- This is the front page, it's just a list of Users with some info about them. Clicking the User on the list takes you to that user's task page -->
+
+		<script type = "text/ng-template" id = "user.htm">
+
+			<h1 class = "page-title"><span class = "title-username">Users</span></h1>
+
+			<div class = "list-group" id = "list-of-users">
+				<a href = "#user/{{user.username}}/{{user.id}}/todos" ng-repeat = "user in fc.users" class = "list-group-item">
+					<h4 class="list-group-item-heading">
+						<span class = "user-username">{{user.username}}</span>
+					</h4>
+					<p class="list-group-item-text user-list-info">
+						<span class = "user-contact-info">{{user.name}}</span>
+						<span class = "user-contact-info">{{user.email}}</span>
+						<span class = "user-contact-info">{{user.phone}}</span>
+					</p>
+				</a>
+			</div>
+
+		</script>
+	
+		<!-- This is the template for the things that you see on the Tasks page for a User. It is a bit more compliated than the previous template which was pretty simple -->
+
+		<script type = "text/ng-template" id = "user-tasks.htm">
+
+			<!-- The Menu Bar. Has Username, an 'X' to close things, and a thing to click to trigger a dropdown for the form to add a new task -->
+
+			<h1 class = "page-title">
+				<span class = "title-username">{{utc.userName}}&#39;s Tasks</span>
+				<span class = "close-x"><a href = "#users">X</a></span>
+				<span class = "task-options glyphicon glyphicon-option-vertical" ng-click = "utc.showTasks = !utc.showTasks"></span>
+			</h1>
+
+
+			<!-- This is probably the most complicated section of markup. Its the form that 
+					adds a new task as well as gives an option to sort the tasks on the page -->
+
+			<div id = "task-options-div" ng-class = "{'active' : utc.showTasks, 'showForm': utc.showForm, 'hideForm': !utc.showForm}">
+				<div id = "task-options-inner">
+					<div id = "task-options-inner-inner-wrapper">
+						<h3>Stuff You Can Do</h3>
+
+						<button type="button" class="btn btn-lg btn-primary" ng-click = "utc.showForm = true" id = "add-new-task-button">
+							Add New Task
+						</button>
+						
+						<div class="form-group" id = "options-sort-container">
+							<label>Sort Task List</label>
+							<select name="nameSelect" ng-model="utc.sortOption" class="form-control">
+								<option value = "unsorted">Unsorted</option>
+								<option value = "completed">Incomplete on Top</option>
+								<option value = "-completed">Complete on Top</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<! -- This is the actual form that is used to create new tasks -->
+
+				<div id = "new-task-form">
+
+					<form name="taskForm" ng-submit="utc.submit()" novalidate>
+
+						<h3>Create New Task</h3>
+
+						<div class="form-group new-task-name" ng-class="{ 'has-error' : taskForm.name.$invalid && !taskForm.name.$pristine }">
+							<label>Task Name</label>
+							<input type="text" name="name" id = "task-name-text-input" class="form-control" ng-model="utc.taskName" ng-minlength = "1" ng-keydown = "utc.submitSuccess = false" required>
+							<p ng-show="taskForm.name.$invalid && !taskForm.name.$pristine" class="help-block task-name-invalid">A task name is required!</p>
+							<p ng-show="taskForm.name.$pristine && utc.submitSuccess" class="help-block form-submit-success-message">{{utc.successMessage}}</p>
+						</div>
+
+						<button type="submit" class="btn btn-success new-task-form-button" ng-disabled="taskForm.$invalid">
+							Add
+						</button>
+
+						<button type="button" class="btn btn-default new-task-form-button" ng-click = "utc.showForm = false">
+							Back
+						</button>
+
+					</form>
+
+				</div>
+
+			</div>
+			
+			<! -- This is the list of User Tasks -->
+
+			<div class = "list-group" id = "list-of-user-tasks">
+				<a ng-repeat = "task in utc.tasks | orderBy:utc.sortOption" class = "list-group-item task-completed-{{task.completed}}" ng-click = 'task.completed = !task.completed'>
+					<h4 class="list-group-item-heading">
+						<span class = "task-icon glyphicon glyphicon-ok" ng-show = "task.completed"></span>
+						<span class = "task-icon glyphicon glyphicon-exclamation-sign" ng-show = '!task.completed'></span>
+						<span class = "user-taskname">{{task.title}}</span>
+						<span class = "delete-task" ng-click = "utc.deleteTask(task.id); $event.stopPropagation();">X</span>
+					</h4>
+				</a>
+			</div>
+
+		</script>
+	</div>
+		
+	<script src = "index.js"></script>
+	
+</body>
+</html>
