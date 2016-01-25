@@ -1,0 +1,445 @@
+/**************************************
+
+Table of contents
+
+Use Ctrl F + Section # to jump to a section!
+
+Notes:
+
+I don't usually write a lot of CSS and I might have gone a little overboard so ... 
+... well I don't really have a point but that's what I did
+
+Anyway a lot of this stuff is just things I've applied from tutorials I've followed along
+
+I tried to have some fun and make it look like a phone app. I think I did alright, it was
+pretty experimental
+
+Sections:
+
+1 - General styles
+
+2 - Users Page Specific Styles
+
+3 - Tasks Page Specific Styes
+3.1 Tasks Title Bar Stuff
+3.2 Tasks List Specific Styles
+3.3 Tasks Options Menu and Form
+
+4 - Media Queries
+
+5 - Animations
+5.1 Ng Enter and Leave stuff for Ng-Views and whatnot
+5.2 User Task Form Animations
+5.3 Keyframe definitions
+
+***************************************/
+
+/**
+* 1 - General Styles
+* ----------------------------------------------------------------------------
+*/
+
+body {
+	background: #ddd;
+	overflow:hidden;
+}
+.list-group-item:first-child {
+	border-radius: 0;
+}
+.page {
+    bottom:0; 
+    padding-top: 67px;
+    position:absolute; 
+    text-align:center;
+    top:0;  
+    width:100%; 
+    background: white;
+    -moz-box-shadow: 0 0 30px #777;
+    -webkit-box-shadow: 0 0 30px #777;
+    box-shadow: 0 0 30px #777;
+}
+.page-title {
+	font-weight: bold;
+	color: white;
+	background: #00D0BC;
+    padding: 10px 0px;
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    margin-top: 0px;
+    box-shadow: 0px 2px 2px #777;
+    z-index: 10000; 
+    margin-bottom: 0px;
+    height: 67px;
+}
+.title-username {
+	position: relative;
+    top: 3px;
+}
+#list-of-users, #list-of-user-tasks {
+	height: 100%;
+    overflow-y: scroll;
+    text-align: left;
+}
+.list-group-item-heading {
+	padding-left: 10px;
+	padding-right: 15px;
+}
+
+/**
+* 2 - Users Page
+* ----------------------------------------------------------------------------
+*/
+
+.front-page .page-title { 
+	background:#00D0BC; 
+}
+.user-tasks .page-title { 
+	background:#E59400; 
+}
+#list-of-users a {
+	cursor: pointer;
+}
+#list-of-users .list-group-item-text span {
+	padding: 0px 10px;
+}
+
+/**
+* 3 - Tasks Page
+* ----------------------------------------------------------------------------
+*/
+
+/**
+* 3.1 - Tasks Title Bar Stuff
+* ----------------------------------------------------------------------------
+*/
+
+.page-title .close-x a {
+	color: white;
+	float: right;
+	margin-right: 20px;
+	position: relative;
+    top: 0px;
+    border-radius: 100%;
+    padding: 4px 12px 4px 11px;
+    transition: all 0.1s;
+}
+.page-title .close-x a:hover {
+	text-decoration: none;
+}
+.page-title .task-options {
+	float: right;
+	padding: 0px 10px;
+	cursor: pointer;
+	margin-right: 10px;
+	border-radius: 100%;
+	padding: 3px 4px 3px 5px;
+	transition: all 0.1s;
+}
+.page-title .task-options:hover, .page-title .close-x a:hover {
+	background: #c57400;
+}
+
+/**
+* 3.2 - Tasks List Specific Styles
+* ----------------------------------------------------------------------------
+*/
+
+.page.user-tasks .list-group-item-heading {
+	margin-left: 20px;
+	margin-right: 20px;
+	overflow: hidden;
+}
+.task-completed-true {
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+.task-completed-false {
+	cursor: pointer;
+}
+.page.user-tasks .task-completed-true .list-group-item-heading {
+	color: #fff;
+}
+.list-group-item.task-completed-true:hover {
+	background-color: #449d44;
+    border-color: #398439;
+}
+.list-group-item.task-completed-true:hover {
+	background-color: #449d44;
+    border-color: #398439;
+}
+.list-group-item .task-icon {
+	color: #E59400;
+	position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.list-group-item.task-completed-true  .task-icon {
+	color: white;
+}
+.delete-task {
+	position: absolute;
+    right: 8px;
+    top: 11px;
+    cursor: pointer;
+    padding: 4px 7px;
+    border-radius: 100%;
+}
+.delete-task:hover {
+	background: #ddd;
+}
+.list-group-item.task-completed-true .delete-task:hover {
+	background: #347d34;
+}
+
+/**
+* 3.3 - Tasks Options Menu and Form
+* ----------------------------------------------------------------------------
+*/
+
+#task-options-div {
+	height: 0px;
+	-webkit-transition: all 0.3s;
+    transition: all 0.3s;
+    visibility: hidden;
+    width: 200%;
+	overflow: hidden;
+	border-bottom: 1px solid #ccc;
+}
+#task-options-div.active {
+	height: 180px;
+	visibility: visible;
+}
+#task-options-inner {
+	width: 50%;
+	float: left;
+}
+#task-options-inner-inner-wrapper {
+	max-width: 450px;
+	margin: auto;
+}
+#new-task-form {
+	width: 50%;
+	float: right;
+}
+
+#options-sort-container {
+	width: 50%;
+	float: right;
+	padding: 0px 10px;
+}
+#options-sort-container label {
+	float: left;
+}
+#add-new-task-button {
+	float: left;
+	position: relative;
+	top: 17px;
+	margin-left: 15px;
+}
+#new-task-form .new-task-form-button {
+	float: right;
+	margin: 10px;
+}
+.new-task-name {
+	margin: 0px 10px;
+}
+.new-task-name label {
+	float: left;
+}
+#task-name-text-input {
+	clear: left;
+}
+.task-name-invalid, .form-submit-success-message {
+	float: left;
+}
+.form-submit-success-message {
+	color: #5cb85c;
+	width: 70%;
+	word-wrap: break-word;
+	text-align: left;
+}
+
+/**
+* 4 - Media Queries
+*	Mostly just a few tweaks to take care of situations where text starts running
+*	Together on small widths
+* ----------------------------------------------------------------------------
+*/
+
+@media only screen and (max-width : 600px) {
+	.page {
+		padding-top: 54px;
+	}
+	h1.page-title {
+		font-size: 24px;
+		height: 54px;
+	}
+	.list-group-item-heading {
+		font-size: 17px;
+	}
+	span.user-contact-info {
+		display: block;
+		font-size: 13px;
+	}
+	.page-title .close-x a {
+		margin-right: 10px;
+		padding: 4px 9px 4px 9px;
+	}
+	.page-title .task-options {
+	    margin-right: 0px;
+	    padding: 3px 4px 3px 5px;
+	}
+	.form-submit-success-message {
+		font-size: 12px;
+		width: 58%;
+	}
+	#task-options-div.active {
+		height: 190px;
+	}
+}
+
+@media only screen and (max-width : 350px) {
+	#add-new-task-button {
+		font-size: 14px;
+		top: 22px;
+	}
+	#new-task-form .help-block.form-submit-success-message {
+		font-size: 11px;
+		line-height: 11px;
+    	width: 49%;
+	}
+	#list-of-user-tasks .list-group-item-heading {
+		font-size: 15px;
+	}
+	.form-submit-success-message {
+		width: 49%;
+	}
+
+}
+
+/**
+* 5 - Animations
+* ----------------------------------------------------------------------------
+*/
+
+/**
+* 5.1 - Ng Enter and Leave stuff
+* Mainly used to switch between pages
+* ----------------------------------------------------------------------------
+*/
+.ng-enter { 
+	z-index: 8888; 
+}
+.ng-leave { 
+	z-index: 9999; 
+}
+.front-page.ng-enter {
+	animation: slideUp 0.3s both ease-in;
+}
+.front-page.ng-leave {
+	animation: slideDown 0.3s both ease-in;
+}
+
+.user-tasks.ng-enter { 
+	animation: scaleUp 0.3s both ease-in;
+}
+.user-tasks.ng-leave { 
+	animation: scaleDown 0.3s both ease-in;
+}
+
+/**
+* 5.2 - User Task Form Animations
+* To show/hide the task form section itself, I just used some transitions
+* thoese are in the Tasks Options Menu and Form section. These animations just 
+* slide the form back and forth
+* ----------------------------------------------------------------------------
+*/
+#task-options-div.showForm {
+	animation: slideOver 0.3s both ease-in;
+}
+#task-options-div.hideForm {
+	animation: slideBack 0.3s both ease-in;
+}
+
+/**
+* 5.3 - Keyframe Definitions
+* ----------------------------------------------------------------------------
+*/
+/* slide in from the bottom */
+@keyframes slideUp {
+	from { transform:translateY(100%); }
+	to 	{ transform: translateY(0); }
+}
+@-moz-keyframes slideUp {
+	from { -moz-transform:translateY(100%); }
+	to 	{ -moz-transform: translateY(0); }
+}
+@-webkit-keyframes slideUp {
+	from { -webkit-transform:translateY(100%); }
+	to 	{ -webkit-transform: translateY(0); }
+}
+
+/* slide down from the top */
+@keyframes slideDown {
+	from { transform:translateY(0); }
+	to 	{ transform: translateY(100%); }
+}
+@-moz-keyframes slideDown {
+	from { -moz-transform:translateY(0); }
+	to 	{ -moz-transform: translateY(100%); }
+}
+@-webkit-keyframes slideDown {
+	from { -webkit-transform:translateY(0); }
+	to 	{ -webkit-transform: translateY(100%); }
+}
+
+/* slide over from the right */
+@keyframes slideOver {
+	from { transform:translateX(0); }
+	to 	{ transform: translateX(-50%); }
+}
+@-moz-keyframes slideOver {
+	from { -moz-transform:translateX(0); }
+	to 	{ -moz-transform: translateX(-50%); }
+}
+@-webkit-keyframes slideOver {
+	from { -webkit-transform:translateX(0); }
+	to 	{ -webkit-transform: translateX(-50%); }
+}
+
+/* slide back from the left */
+@keyframes slideBack {
+	from { transform:translateX(-50%); }
+	to 	{ transform: translateX(0); }
+}
+@-moz-keyframes slideBack {
+	from { -moz-transform:translateX(-50%); }
+	to 	{ -moz-transform: translateX(0); }
+}
+@-webkit-keyframes slideBack {
+	from { -webkit-transform:translateX(-50%); }
+	to 	{ -webkit-transform: translateX(0); }
+}
+
+/* scale up */
+@keyframes scaleUp {
+	from { opacity: 0.3; transform: scale(0.8); }
+}
+@-moz-keyframes scaleUp {
+	from { opacity: 0.3; -moz-transform: scale(0.8); }
+}
+@-webkit-keyframes scaleUp {
+	from { opacity: 0.3; -webkit-transform: scale(0.8); }
+}
+
+/* scale up */
+@keyframes scaleDown {
+	to 	{ opacity: 0.3; transform: scale(0.8); }
+}
+@-moz-keyframes scaleDown {
+	to	{ opacity: 0.3; -moz-transform: scale(0.8); }
+}
+@-webkit-keyframes scaleDown {
+	to 	{ opacity: 0.3; -webkit-transform: scale(0.8); }
+}
